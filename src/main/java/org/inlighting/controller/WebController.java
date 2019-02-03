@@ -1,7 +1,9 @@
 package org.inlighting.controller;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+//import org.apache.log4j.LogManager;
+// import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.*;
 import org.apache.shiro.subject.Subject;
