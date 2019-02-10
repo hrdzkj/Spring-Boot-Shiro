@@ -36,7 +36,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
         String authorization = httpServletRequest.getHeader("Authorization");
 
         JWTToken token = new JWTToken(authorization);
-        // 提交给realm进行登入，如果错误他会抛出异常并被捕获
+        // 提交给realm进行登入，如果错误他会抛出异常并被isAccessAllowed捕获
         getSubject(request, response).login(token);
         // 如果没有抛出异常则代表登入成功，返回true
         return true;
@@ -53,13 +53,17 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-        if (isLoginAttempt(request, response)) {
+    	//判断请求的请求头是否带上 "token
+    	if (isLoginAttempt(request, response)) {
+        	/*如果存在则进入executeLogin方法执行登入以检查token是否正确*/
             try {
                 executeLogin(request, response);
-            } catch (Exception e) {
+            } catch (Exception e) { //捕获提交给realm进行登入的引发的异常
                 response401(request, response);
             }
         }
+    	// 如果请求头不存在 Token，则可能是执行登陆操作或者是游客状态访问，
+    	// 无需检查 token，直接返回 true
         return true;
     }
 
@@ -87,7 +91,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     private void response401(ServletRequest req, ServletResponse resp) {
         try {
             HttpServletResponse httpServletResponse = (HttpServletResponse) resp;
-            httpServletResponse.sendRedirect("/401");
+            httpServletResponse.sendRedirect("/401"); //重定向到/401,请看WebController.java对/401的处理
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }

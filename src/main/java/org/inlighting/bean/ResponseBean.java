@@ -1,5 +1,6 @@
 package org.inlighting.bean;
 
+// 既然想要实现restful，那我们要保证每次返回的格式都是相同的，因此建立了一个ResponseBean来统一返回的格式。
 public class ResponseBean {
 
     // http 状态码

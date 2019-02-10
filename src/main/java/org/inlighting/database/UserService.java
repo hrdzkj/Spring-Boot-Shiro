@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+//构建一个UserService来模拟数据库查询 并且把结果放到UserBean之中
 @Component
 public class UserService {
 

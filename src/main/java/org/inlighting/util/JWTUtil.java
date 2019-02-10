@@ -9,13 +9,16 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
+//JWT加密，校验工具，并且使用用户自己的密码充当加密密钥
 public class JWTUtil {
 
     // 过期时间5分钟
-    private static final long EXPIRE_TIME = 5*60*1000;
+     // private static final long EXPIRE_TIME = 5*60*1000;
+	//测试改为24小时过期时间
+	 private static final long EXPIRE_TIME =  60 * 24 * 60 * 1000;
 
     /**
-     * 校验token是否正确
+            * 校验token是否正确
      * @param token 密钥
      * @param secret 用户的密码
      * @return 是否正确

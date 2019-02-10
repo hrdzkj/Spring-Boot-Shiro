@@ -15,6 +15,8 @@ import javax.servlet.Filter;
 import java.util.HashMap;
 import java.util.Map;
 
+// 配置ShiroConfig，将自定义的过滤器JWTFilter设置进去
+
 @Configuration
 public class ShiroConfig {
 
@@ -25,7 +27,7 @@ public class ShiroConfig {
         manager.setRealm(realm);
 
         /*
-         * 关闭shiro自带的session，详情见文档
+                     * 关闭shiro自带的session，详情见文档
          * http://shiro.apache.org/session-management.html#SessionManagement-StatelessApplications%28Sessionless%29
          */
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
@@ -37,6 +39,7 @@ public class ShiroConfig {
         return manager;
     }
 
+    // todo:读这个链接理解过滤器https://blog.csdn.net/qq_39211866/article/details/85222852
     @Bean("shiroFilter")
     public ShiroFilterFactoryBean factory(DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
@@ -50,7 +53,7 @@ public class ShiroConfig {
         factoryBean.setUnauthorizedUrl("/401");
 
         /*
-         * 自定义url规则
+                     * 自定义url规则
          * http://shiro.apache.org/web.html#urls-
          */
         Map<String, String> filterRuleMap = new HashMap<>();
@@ -63,7 +66,9 @@ public class ShiroConfig {
     }
 
     /**
-     * 下面的代码是添加注解支持
+            * 下面的代码是添加注解支持
+     * @param securityManager 安全管理器
+     * @return 授权Advisor
      */
     @Bean
     @DependsOn("lifecycleBeanPostProcessor")
