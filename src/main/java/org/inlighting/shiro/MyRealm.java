@@ -17,7 +17,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-// 继承AuthorizingRealm，实现用户授权的验证和权限的验证
+/*
+ * 继承AuthorizingRealm，实现用户授权的验证和权限的验证
+ */
 @Service
 public class MyRealm extends AuthorizingRealm {
 
