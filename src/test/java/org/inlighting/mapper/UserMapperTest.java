@@ -42,12 +42,12 @@ public class UserMapperTest {
 
 	@Test
 	public void testUpdate() throws Exception {
-		UserEntity user = UserMapper.getOne(6l);
+		UserEntity user = UserMapper.getOne(11L);
 		if (user != null) {
 			System.out.println(user.toString());
-			user.setNickName("neo");
+			user.setNickName("LIUYI");
 			UserMapper.update(user);
-			Assert.assertTrue(("neo".equals(UserMapper.getOne(6l).getNickName())));
+			Assert.assertTrue(("neo".equals(UserMapper.getOne(11L).getNickName())));
 		}
 	}
 
