@@ -2,8 +2,8 @@ package org.inlighting.web;
 
 import java.util.List;
 
-import org.inlighting.entity.UserEntity;
 import org.inlighting.mapper.UserMapper;
+import org.inlighting.po.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

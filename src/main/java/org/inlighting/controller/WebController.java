@@ -39,9 +39,9 @@ public class WebController {
         }
         
         if (userBean.getPassword().equals(password)) {
-            return new ResponseBean(ResultCode.CODE_OK, "Login success", JWTUtil.sign(username, password));
+            return new ResponseBean(ResultCode.CODE_1, "Login success", JWTUtil.sign(username, password));
         } else {
-        	return new ResponseBean(ResultCode.CODE_OK, "密码不正确", null);
+        	return new ResponseBean(ResultCode.CODE_1, "密码不正确", null);
         }
     }
 

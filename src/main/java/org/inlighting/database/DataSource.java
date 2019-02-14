@@ -3,8 +3,8 @@ package org.inlighting.database;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.inlighting.entity.UserEntity;
 import org.inlighting.mapper.UserMapper;
+import org.inlighting.po.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DataSource {
