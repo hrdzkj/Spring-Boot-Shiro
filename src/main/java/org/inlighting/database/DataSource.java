@@ -3,9 +3,12 @@ package org.inlighting.database;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.inlighting.entity.UserEntity;
+import org.inlighting.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class DataSource {
     private static Map<String, Map<String, String>> data = new HashMap<>();
-
     static {
     	//设置smith用户的密码、角色、权限信息
         Map<String, String> data1 = new HashMap<>();
@@ -26,4 +29,6 @@ public class DataSource {
     public static Map<String, Map<String, String>> getData() {
         return data;
     }
+    
+
 }

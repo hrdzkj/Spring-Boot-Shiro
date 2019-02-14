@@ -22,5 +22,7 @@ public interface UserMapper {
 	void update(UserEntity user);
 
 	void delete(Long id);
+	
+	UserEntity getStudentByName(String studentName);
 
 }

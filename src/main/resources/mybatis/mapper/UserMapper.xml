@@ -25,6 +25,13 @@
 	   WHERE id = #{id}
     </select>
 
+    <select id="getStudentByName" parameterType="java.lang.String" resultMap="BaseResultMap" >
+        SELECT 
+       <include refid="Base_Column_List" />
+	   FROM users
+	   WHERE userName = #{studentName}
+    </select>
+    
     <insert id="insert" parameterType="org.inlighting.entity.UserEntity" >
        INSERT INTO 
        		users
