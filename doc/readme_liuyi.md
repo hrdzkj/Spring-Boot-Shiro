@@ -15,3 +15,6 @@ DataSource.java--获取数据库信息
 
 POJO POJO（Plain Ordinary Java Object）简单的Java对象，实际就是普通JavaBeans
 
+
+com.taohan.online.exam----->org.gxqfy.exam
+
