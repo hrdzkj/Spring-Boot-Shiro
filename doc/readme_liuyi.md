@@ -8,6 +8,13 @@ http://www.ityouknow.com/springboot/2016/11/06/spring-boo-mybatis.html
 Invalid bound statement (not found)错误的可能原因:
 https://www.cnblogs.com/liaojie970/p/8034525.html
 
+理解了分成3层：
+接口层：@Controller/@RestController/@ResponseBody/@RestControllerAdvice  @RequestMapping/@RequestParam
+业务层：@Component/@service
+数据层：@Autowired
+持久层：@Repository
+整个应用层：@MapperScan
+
 
 todo:
 1.先连接登录的正常
@@ -24,7 +31,9 @@ POJO POJO（Plain Ordinary Java Object）简单的Java对象，实际就是普�
 todo：
 1.）所有接口层handler下的接口也转移过来了，只要根据一个个具体接口，调整接口返回json。
 2.）实现生产token的算法，及登录拦截
-
+3.）手机填空题，采用富文本SpannableString,弹窗输入的方式解决。
+https://www.cnblogs.com/zimengfang/p/5527259.html
+4)ios端，估计开发时间也是比较久。 先混属性后端spring boot 再开发苹果吧。
 
 
 

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.gxqfy.exam.dao.TeacherInfoMapper">
+	
+	<resultMap type="org.gxqfy.exam.po.TeacherInfo" id="getTeacherResultMap">
+		<id column="teacherId" property="teacherId"/>
+		<result column="teacherName" property="teacherName" />
+		<result column="teacherAccount" property="teacherAccount"/>
+		<result column="teacherPwd" property="teacherPwd"/>
+		<result column="adminPower" property="adminPower"/>
+		<result column="isWork" property="isWork"/>
+		<association property="classInfo" javaType="org.gxqfy.exam.po.ClassInfo">
+			<id column="classId" property="classId"/>
+			<result column="className" property="className"/>
+		</association>
+	</resultMap>
+	
+	<parameterMap type="java.util.Map" id="getTeachersParameterMap">
+		<!-- 带教对象 -->
+		<parameter property="teacher" resultMap="getTeacherResultMap"/>
+		<!-- 起始位置索引 -->
+		<parameter property="startIndex" resultMap="getTeacherResultMap"/>
+		<!-- 每页显示数据量 -->
+		<parameter property="pageShow" resultMap="getTeacherResultMap"/>
+	</parameterMap>
+	
+	<!-- 获取带教集合 -->
+	<!-- <select id="getTeachers" parameterType="org.gxqfy.exam.po.TeacherInfo" resultMap="getTeacherResultMap">
+		SELECT a.*,b.classId,b.className FROM TeacherInfo a
+		LEFT JOIN ClassInfo b ON a.teacherId=b.teacherId
+		<where>
+			<if test="isWork != null">
+				isWork=#{isWork}
+			</if>
+		</where>
+	</select> -->
+	
+	<!-- 使用 paramenterMap 查询 -->
+	<select id="getTeachers" parameterMap="getTeachersParameterMap" resultMap="getTeacherResultMap">
+		SELECT a.*,b.classId,b.className FROM TeacherInfo a
+		LEFT JOIN ClassInfo b ON a.teacherId=b.teacherId
+		<where>
+			<if test="teacher != null">
+				isWork=#{teacher.isWork}
+			</if>
+		</where>
+		<if test="startIndex != null and pageShow != null">
+			LIMIT #{startIndex}, #{pageShow}
+		</if>
+	</select>
+	
+	<!-- 根据带教账户获取带教信息 -->
+	<select id="getTeacherByAccount" parameterType="string" resultType="org.gxqfy.exam.po.TeacherInfo">
+		SELECT teacherId, teacherName, teacherAccount, teacherPwd, adminPower FROM TeacherInfo WHERE teacherAccount=#{teacherAccount}
+	</select>
+	
+	<!-- 获取带教数据总量 -->
+	<select id="getTeacherTotal" resultType="int">
+		SELECT COUNT(teacherId) FROM TeacherInfo
+	</select>
+	
+	<!-- 修改带教带教职工状态 -->
+	<update id="updateTeacherIsWork" parameterType="org.gxqfy.exam.po.TeacherInfo">
+		UPDATE TeacherInfo SET isWork=#{isWork} WHERE teacherId=#{teacherId}
+	</update>
+	
+	<!-- 根据带教编号获取带教信息 -->
+	<select id="getTeacherById" parameterType="int" resultType="org.gxqfy.exam.po.TeacherInfo">
+		SELECT * FROM TeacherInfo WHERE teacherId=#{teacherId}
+	</select>
+	
+	<!-- 修改带教信息 -->
+	<update id="isUpdateTeacherInfo" parameterType="org.gxqfy.exam.po.TeacherInfo">
+		UPDATE TeacherInfo SET teacherName=#{teacherName}, teacherAccount=#{teacherAccount},
+			teacherPwd=#{teacherPwd}, adminPower=#{adminPower}
+		WHERE teacherId=#{teacherId}
+	</update>
+	
+	<!-- 添加带教 -->
+	<insert id="isAddTeacherInfo" parameterType="org.gxqfy.exam.po.TeacherInfo">
+		INSERT INTO TeacherInfo VALUES(NULL, #{teacherName}, #{teacherAccount}, #{teacherPwd}, #{adminPower}, 0)
+	</insert>
+	
+	<!-- 删除带教 -->
+	<delete id="isDelTeacherInfo" parameterType="int">
+		DELETE FROM TeacherInfo WHERE teacherId=#{teacherId}
+	</delete>
+	
+</mapper>

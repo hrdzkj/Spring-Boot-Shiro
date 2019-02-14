@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.gxqfy.exam.dao.GradeInfoMapper">
+	
+	<!-- 查询所有科室 -->
+	<select id="getGrades" resultType="org.gxqfy.exam.po.GradeInfo">
+		SELECT * FROM GradeInfo
+	</select>
+	
+	<!-- 根据编号获取科室 -->
+	<select id="getGradeById" parameterType="int" resultType="org.gxqfy.exam.po.GradeInfo">
+		SELECT * FROM GradeInfo WHERE gradeId=#{gradeId}
+	</select>
+	
+	
+	<!-- 添加科室 -->
+	<insert id="isAddGrade" parameterType="org.gxqfy.exam.po.GradeInfo">
+		INSERT INTO GradeInfo VALUES(NULL, #{gradeName})
+	</insert>
+	
+	<!-- 删除科室 -->
+	<delete id="isDelGrade" parameterType="int">
+		DELETE FROM GradeInfo WHERE gradeId=#{gradeId}
+	</delete>
+	
+	<!-- 修改科室信息 -->
+	<update id="isUpdateGrade" parameterType="org.gxqfy.exam.po.GradeInfo">
+		UPDATE GradeInfo SET gradeName=#{gradeName} WHERE gradeId=#{gradeId}
+	</update>
+	
+</mapper>
