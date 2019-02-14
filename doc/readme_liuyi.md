@@ -13,3 +13,5 @@ todo:
 1.先连接登录的正常
 DataSource.java--获取数据库信息
 
+POJO POJO（Plain Ordinary Java Object）简单的Java对象，实际就是普通JavaBeans
+
