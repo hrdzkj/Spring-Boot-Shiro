@@ -12,7 +12,12 @@ public class ResponseBean {
     // 返回的数据
     private Object data;
 
+    private ResponseBean() {
+      super();	
+    } 
+    
     public ResponseBean(int code, String msg, Object data) {
+    	super();
         this.code = code;
         this.msg = msg;
         this.data = data;

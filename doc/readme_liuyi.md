@@ -18,3 +18,9 @@ POJO POJO（Plain Ordinary Java Object）简单的Java对象，实际就是普�
 
 com.taohan.online.exam----->org.gxqfy.exam
 
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-logging</artifactId>
+		</dependency>
+

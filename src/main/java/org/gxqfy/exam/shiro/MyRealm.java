@@ -7,8 +7,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.gxqfy.exam.database.UserBean;
-import org.gxqfy.exam.database.UserService;
+import org.gxqfy.exam.po.StudentInfo;
+import org.gxqfy.exam.service.StudentInfoService;
 import org.gxqfy.exam.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,13 +25,22 @@ public class MyRealm extends AuthorizingRealm {
 
     private static final Logger LOGGER = LogManager.getLogger(MyRealm.class);
 
+    /*
     private UserService userService;
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
-
+*/
+    
+	@Autowired
+	private StudentInfoService studentInfoService;
+	
+    @Autowired
+    public void setUserService(StudentInfoService studentInfoService) {
+        this.studentInfoService = studentInfoService;
+    }
     /**
            * 必须重写此方法，不然Shiro会报错
      **/
@@ -49,12 +58,12 @@ public class MyRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
     	System.out.println("————权限认证————");
-        String username = JWTUtil.getUsername(principals.toString());
-        UserBean user = userService.getUser(username);
+        //String username = JWTUtil.getUsername(principals.toString());
+        // UserBean user = userService.getUser(username);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        simpleAuthorizationInfo.addRole(user.getRole()); //角色
-        Set<String> permission = new HashSet<>(Arrays.asList(user.getPermission().split(",")));
-        simpleAuthorizationInfo.addStringPermissions(permission);//权限
+        simpleAuthorizationInfo.addRole("admin"); //角色
+        //Set<String> permission = new HashSet<>(Arrays.asList(user.getPermission().split(",")));
+        //simpleAuthorizationInfo.addStringPermissions(permission);//权限
         return simpleAuthorizationInfo;
     }
 
@@ -65,12 +74,15 @@ public class MyRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
     	System.out.println("————身份认证方法————");
     	String token = (String) auth.getCredentials();
+
+        StudentInfo std =studentInfoService.getStudentById(28);
         // 解密获得username，用于和数据库进行对比
         String username = JWTUtil.getUsername(token);
         if (username == null) {
             throw new AuthenticationException("token 不合法");
         }
 
+        /*
         UserBean userBean = userService.getUser(username);
         if (userBean == null) {
             throw new AuthenticationException("User didn't existed!");
@@ -79,7 +91,7 @@ public class MyRealm extends AuthorizingRealm {
         if (! JWTUtil.verify(token, username, userBean.getPassword())) {
             throw new AuthenticationException("Username or password error");
         }
-
+          */
         return new SimpleAuthenticationInfo(token, token, "my_realm");
     }
 }

@@ -67,26 +67,26 @@
 
 
 	<build>
-		  <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <excludes>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<excludes>
 					<exclude>bootstrap-test.properties</exclude>
-                    <exclude>bootstrap-dev.properties</exclude>
-                    <exclude>bootstrap-pro.properties</exclude>
-                    <exclude>bootstrap.properties</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>bootstrap-${env}.properties</include>
-                    <include>bootstrap.properties</include>
-                </includes>
-            </resource>
-        </resources>
+					<exclude>bootstrap-dev.properties</exclude>
+					<exclude>bootstrap-pro.properties</exclude>
+					<exclude>bootstrap.properties</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>bootstrap-${env}.properties</include>
+					<include>bootstrap.properties</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<!-- Srping Boot 打包工具 -->
 			<plugin>
