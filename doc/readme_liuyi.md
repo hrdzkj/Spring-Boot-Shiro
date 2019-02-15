@@ -28,11 +28,14 @@ POJO POJO（Plain Ordinary Java Object）简单的Java对象，实际就是普�
 属于基础数据的POJO。
 属于业务层的service/service.impl包下的所有对象。
 
-todo：
-1.）所有接口层handler下的接口也转移过来了，只要根据一个个具体接口，调整接口返回json。
-2.）实现生产token的算法，及登录拦截
+todo：。所有业务层都也转移过来了，只要根据一个个具体接口，调整接口返回json。一个一个来
+实现生产token的算法，及登录拦截，过期验证
 3.）手机填空题，采用富文本SpannableString,弹窗输入的方式解决。
 https://www.cnblogs.com/zimengfang/p/5527259.html
 4)ios端，估计开发时间也是比较久。 先混属性后端spring boot 再开发苹果吧。
+5）需要的接口：
+用户接口：登录、注册，修改密码；
+考试接口：考试列表，题目列表，选项提交，考试提交；考试成绩； 考试历史浏览
+
 
 

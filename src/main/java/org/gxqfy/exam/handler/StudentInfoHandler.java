@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.gxqfy.exam.component.JWTComponent;
+import org.gxqfy.exam.component.UserComponent;
 import org.gxqfy.exam.po.ClassInfo;
 import org.gxqfy.exam.po.ExamChooseInfo;
 import org.gxqfy.exam.po.ExamHistoryPaper;
@@ -72,11 +74,18 @@ public class StudentInfoHandler {
 	private GradeInfo grade;
 	@Autowired
 	private StudentInfo student;
-	
 	@Autowired
 	private ExamPaperInfoService examPaperInfoService;
-
+    @Autowired
+	private JWTComponent mJwtUtil;
 	private Logger logger = LoggerFactory.getLogger(StudentInfoHandler.class);
+
+	private UserComponent mUserComponent;
+
+    @Autowired
+    public void setService(UserComponent userComponent) {
+    	mUserComponent = userComponent;
+    }
 
 	/**
 	 * 获取职工集合
@@ -248,37 +257,20 @@ public class StudentInfoHandler {
 	}
 	
 	/**
+	 * liuyi modify
 	 * 职工登录考试
 	 * @param student 登录职工
 	 * @param request
 	 * @return
 	 */
-  /*
-	@RequestMapping(value="/studentLogin", method=RequestMethod.POST)
-	public ModelAndView studentLogin(StudentInfo student, HttpServletRequest request) {
-		
-		StudentInfo loginStudent = studentInfoService.getStudentByAccountAndPwd(student.getStudentAccount());
-		logger.info("职工 "+loginStudent+" 有效登录");
-		ModelAndView model = new ModelAndView();
-		if(loginStudent == null || !student.getStudentPwd().equals(loginStudent.getStudentPwd())){
-			model.setViewName("reception/suc");
-			model.addObject("success", "密码错误");
-			return model;
-		}
-		request.getSession().setAttribute("loginStudent", loginStudent);
-		model.setViewName("reception/suc");
-		model.addObject("success", "登录成功");	
-		return model;
-	}
-	*/
-	
 	@ResponseBody
 	@RequestMapping(value="/studentLogin", method=RequestMethod.POST)
 	public ResponseBean studentLogin(@RequestParam("studentAccount") String studentAccount,@RequestParam("studentPwd") String studentPwd) {	
 		StudentInfo loginStudent = studentInfoService.getStudentByAccountAndPwd(studentAccount);
 		if(loginStudent != null && loginStudent.getStudentPwd().equals(studentPwd)){
-			// todo： 生产token返回
-			return new ResponseBean(ResultCode.CODE_OK,"登录成功","aaaaaaaaa");
+			String token =mJwtUtil.generateToken(loginStudent);
+			mUserComponent.putStudent(loginStudent);
+			return new ResponseBean(ResultCode.CODE_OK,"登录成功",token);
 		}else {
 			return new ResponseBean(ResultCode.CODE_1,"用户名或密码错误",null);
 		    
