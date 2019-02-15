@@ -20,30 +20,35 @@ import java.util.Set;
 
 /*
  * 继承AuthorizingRealm，实现用户授权的验证和权限的验证
+ * 测试发现，不能@Autowired变量，要用方法。
  */
 @Service
 public class MyRealm extends AuthorizingRealm {
 
     private static final Logger LOGGER = LogManager.getLogger(MyRealm.class);
-    private UserComponent mUserComponent;
-    @Autowired
+	private StudentInfoService studentInfoService;
+	private UserComponent mUserComponent;
 	private JWTComponent mJwtUtil;
+
     
     @Autowired
     public void setUserService(UserComponent userComponent) {
         this.mUserComponent = userComponent;
     }
 
+    @Autowired
+    public void setJWTComponent(JWTComponent jwtComponent) {
+        this.mJwtUtil = jwtComponent;
+    }
     
-	@Autowired
-	private StudentInfoService studentInfoService;
-	
     @Autowired
     public void setUserService(StudentInfoService studentInfoService) {
         this.studentInfoService = studentInfoService;
     }
+    
+    
     /**
-           * 必须重写此方法，不然Shiro会报错
+     * 必须重写此方法，不然Shiro会报错
      **/
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -66,7 +71,7 @@ public class MyRealm extends AuthorizingRealm {
         //simpleAuthorizationInfo.addStringPermissions(permission);//权限
         return simpleAuthorizationInfo;
         /*
-         * 曲线认证
+         * 认证
          if (username != null && jwtUtil.validateToken(authToken)) {
 			Claims claims = jwtUtil.getAllClaimsFromToken(authToken);
 			List<String> rolesMap = claims.get("role", List.class);
@@ -92,9 +97,9 @@ public class MyRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
-    	System.out.println("————身份认证方法————");
+    	System.out.println("————开始身份认证————");
     	String token = (String) auth.getCredentials();
-    
+ 
         String username = mJwtUtil.getUsernameFromToken(token);;
         if (username == null) {
             throw new AuthenticationException("token 不合法");
@@ -107,10 +112,10 @@ public class MyRealm extends AuthorizingRealm {
         }
         
        // 是否过期
-    	if(!mJwtUtil.isTokenExpired(token)) {
+    	if(mJwtUtil.isTokenExpired(token)) {
     		throw new AuthenticationException("token已经过期");
     	}
-    	
+    	System.out.println("————身份认证成功————");
         return new SimpleAuthenticationInfo(token, token, "my_realm");
     }
 }

@@ -26,11 +26,11 @@ public class JWTComponent implements Serializable {
 	//测试改为24小时过期时间
 	private static final long EXPIRE_TIME =  60 * 24 * 60 * 1000;
 	
-	private static SecretKey mKey = new SecretKeySpec(DatatypeConverter.parseBase64Binary("ExampleKey"), SignatureAlgorithm.HS512.getJcaName()); //Keys.secretKeyFor(SignatureAlgorithm.HS256); 
+	private static SecretKey mKey = new SecretKeySpec(DatatypeConverter.parseBase64Binary("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), SignatureAlgorithm.HS256.getJcaName()); //Keys.secretKeyFor(SignatureAlgorithm.HS256); 
 	private static final long serialVersionUID = 1L;
 	
-	@Value("${springbootwebfluxjjwt.jjwt.secret}")
-	private String secret;
+	//@Value("${springbootwebfluxjjwt.jjwt.secret}")
+	//private String secret;
 	
 	public Claims getAllClaimsFromToken(String token) {
 		//return Jwts.parser().setSigningKey(Base64.getEncoder().encodeToString(secret.getBytes())).parseClaimsJws(token).getBody();
