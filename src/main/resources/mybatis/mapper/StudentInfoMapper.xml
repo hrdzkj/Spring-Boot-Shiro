@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="studentName" property="studentName"/>
 		<result column="studentAccount" property="studentAccount"/>
 		<result column="studentPwd" property="studentPwd"/>
+		<result column="email" property="email"/>
 		<!-- 层级 -->
 		<association property="classInfo" javaType="org.gxqfy.exam.po.ClassInfo">
 			<id column="classId" property="classId"/>
@@ -71,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<insert id="isAddStudent" parameterType="org.gxqfy.exam.po.StudentInfo">
-		INSERT INTO StudentInfo VALUES(NULL, #{studentName}, #{studentAccount}, #{studentPwd}, #{classInfo.classId})
+		INSERT INTO StudentInfo VALUES(NULL, #{studentName}, #{studentAccount}, #{studentPwd}, #{classInfo.classId},#{email})
 	</insert>
 	
 	<select id="getStudentTotal" resultType="int">

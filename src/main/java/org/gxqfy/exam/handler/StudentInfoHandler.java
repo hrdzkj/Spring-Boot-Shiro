@@ -10,9 +10,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.gxqfy.exam.component.JWTComponent;
 import org.gxqfy.exam.component.UserComponent;
+import org.gxqfy.exam.dao.common.CommonStudentMapper;
 import org.gxqfy.exam.po.ClassInfo;
 import org.gxqfy.exam.po.ExamChooseInfo;
 import org.gxqfy.exam.po.ExamHistoryPaper;
@@ -29,6 +33,7 @@ import org.gxqfy.exam.service.ExamPaperInfoService;
 import org.gxqfy.exam.service.ExamSubjectMiddleInfoService;
 import org.gxqfy.exam.service.StudentInfoService;
 import org.gxqfy.exam.util.ResultCode;
+import org.gxqfy.exam.util.TextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -78,10 +83,12 @@ public class StudentInfoHandler {
 	private ExamPaperInfoService examPaperInfoService;
     @Autowired
 	private JWTComponent mJwtUtil;
-	private Logger logger = LoggerFactory.getLogger(StudentInfoHandler.class);
-
+	
+    @Autowired
+	private CommonStudentMapper mCommonStudentMapper;
+	
 	private UserComponent mUserComponent;
-
+	private Logger logger = LoggerFactory.getLogger(StudentInfoHandler.class);
     @Autowired
     public void setService(UserComponent userComponent) {
     	mUserComponent = userComponent;
@@ -314,31 +321,55 @@ public class StudentInfoHandler {
 	}
 	
 	/**
-	 * 职工注册
-	 * @param studentName
-	 * @param studentAccount
-	 * @param studentPwd
-	 * @param classId
-	 * @param response
-	 * @throws IOException
+	 * 学生注册
 	 */
+	@ResponseBody
 	@RequestMapping(value="/studentReg", method=RequestMethod.POST)
-	public void studentRegister(
-			@RequestParam("name") String studentName,
+	public ResponseBean studentRegister(
 			@RequestParam("account") String studentAccount,
 			@RequestParam("pwd") String studentPwd,
 			@RequestParam("classId") Integer classId,
-			HttpServletResponse response) throws IOException {
-		ModelAndView model = new ModelAndView();
-		student.setStudentName(studentName);
+			@RequestParam("email") String email) throws IOException {
+		//拦截空
+		if(TextUtil.isEmpty(studentAccount)) {
+			return new ResponseBean(ResultCode.CODE_1, "用户不能为空", null);
+		}
+	
+		if(TextUtil.isEmpty(studentPwd)) {
+			return new ResponseBean(ResultCode.CODE_1, "密码不能为空", null);
+		}
+		
+		if(TextUtil.isEmpty(email)) {
+			return new ResponseBean(ResultCode.CODE_1, "邮箱不能为空", null);
+		}
+		
+		//检查是用户名和邮箱是否已经注册
+		StudentInfo student = mCommonStudentMapper.selectStudentBystudentName(studentAccount);
+		if (student!=null) {
+			return new ResponseBean(ResultCode.CODE_1, "用户名已经被注册", null);	
+		}
+		
+		student = mCommonStudentMapper.selectStudentBystudentEmail(email);
+		if (student!=null) {
+			return new ResponseBean(ResultCode.CODE_1, "邮箱已经被注册", null);	
+		}	
+			
+		//写库
+		student = new StudentInfo();
+		student.setStudentName(studentAccount);
 		student.setStudentAccount(studentAccount);
+		student.setEmail(email);
 		student.setStudentPwd(studentPwd);
 		classInfo.setClassId(classId);
 		student.setClassInfo(classInfo);
-		logger.info("职工注册 "+student);
+	
 		int row = studentInfoService.isAddStudent(student);
-		
-		response.getWriter().print("t");
+		if (row>0) {
+		    return new ResponseBean(ResultCode.CODE_OK, "注册成功", null);
+		}else {
+			return new ResponseBean(ResultCode.CODE_OK, "注册失败", null);
+		}
+
 	}
 	
 	/**
@@ -586,26 +617,30 @@ public class StudentInfoHandler {
 	
 	/**
 	 * 职工修改密码
-	 * @param pwd
-	 * @param studentId
-	 * @param response
-	 * @throws IOException
 	 */
-	@RequestMapping("/reset/{pwd}/{studentId}")
-	public void isResetPwd(
-			@PathVariable("pwd") String pwd,
-			@PathVariable("studentId") Integer studentId,
-			HttpServletResponse response) throws IOException {
-		logger.info("职工 "+studentId+" 修改密码");
+	@ResponseBody
+	@RequestMapping("/resetPassword")
+	public ResponseBean isResetPwd(
+			@RequestParam("oldPwd") String oldPwd,
+			@RequestParam("newPwd") String newPwd,
+			@RequestParam("studentId") Integer studentId) throws IOException {
+		StudentInfo student= studentInfoService.getStudentById(studentId);
+		if (student==null) {
+			return new ResponseBean(ResultCode.CODE_1, "查找用户失败，请联系系统管理员", null);
+		}
+		
+		if (!oldPwd.equals(student.getStudentPwd())) {
+			return new ResponseBean(ResultCode.CODE_1, "旧密码不正确", null);
+		}
+		
 		student.setStudentId(studentId);
-		student.setStudentPwd(pwd);
-		
+		student.setStudentPwd(newPwd);
 		int row = studentInfoService.isResetPwdWithStu(student);
-		
 		if (row > 0) {
-			response.getWriter().print("t");
+			mUserComponent.removeStudent(student);
+			return new ResponseBean(ResultCode.CODE_OK, "修改密码成功，请重新登录", null);
 		} else {
-			response.getWriter().print("f");			
+			return new ResponseBean(ResultCode.CODE_OK, "修改密码失败", null);			
 		}
 	}
 }

@@ -21,6 +21,9 @@ public class StudentInfo {
 	private String studentName;
 	private String studentAccount;
 	private String studentPwd;
+	private String email;
+
+
 	private ClassInfo classInfo;
 	private GradeInfo grade;
 
@@ -72,6 +75,14 @@ public class StudentInfo {
 		this.grade = grade;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 	@Override
 	public String toString() {
 		return "StudentInfo [studentId=" + studentId + ", studentName="

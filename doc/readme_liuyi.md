@@ -9,7 +9,7 @@ Invalid bound statement (not found)错误的可能原因:
 https://www.cnblogs.com/liaojie970/p/8034525.html
 
 理解了分成3层：
-接口层：@Controller/@RestController/@ResponseBody/@RestControllerAdvice  @RequestMapping/@RequestParam
+接口层：@Controller/@RestController/@ResponseBody/@RestControllerAdvice  @RequestMapping/@RequestParam/@PathVariable
 业务层：@Component/@service
 数据层：@Autowired
 持久层：@Repository
@@ -34,8 +34,10 @@ todo：。所有业务层都也转移过来了，只要根据一个个具体接�
 https://www.cnblogs.com/zimengfang/p/5527259.html
 4)ios端，估计开发时间也是比较久。 先混属性后端spring boot 再开发苹果吧。
 5）需要的接口：
-用户接口：登录、注册，修改密码；
+用户接口：登录、注册，修改密码；找回密码,（找回密码，通过发送一个随机生成的密码到注册邮箱，登录之后修改密码）
 考试接口：考试列表，题目列表，选项提交，考试提交；考试成绩； 考试历史浏览
+
+接口--用户下的接口需要登录，不是用户下的接口，不用登录
 
 
 
