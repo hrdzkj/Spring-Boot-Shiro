@@ -94,6 +94,14 @@ public class StudentInfoHandler {
     	mUserComponent = userComponent;
     }
 
+    
+	@ResponseBody
+	@RequestMapping(value="/common/401",method = {RequestMethod.POST,RequestMethod.GET})
+	public ResponseBean response401() {	
+		return new ResponseBean(401, "Unauthorized", null);
+	}
+	
+	
 	/**
 	 * 获取职工集合
 	 * @param studentId 职工编号
@@ -271,7 +279,7 @@ public class StudentInfoHandler {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="/studentLogin", method=RequestMethod.POST)
+	@RequestMapping(value="/common/studentLogin", method=RequestMethod.POST)
 	public ResponseBean studentLogin(@RequestParam("studentAccount") String studentAccount,@RequestParam("studentPwd") String studentPwd) {	
 		StudentInfo loginStudent = studentInfoService.getStudentByAccountAndPwd(studentAccount);
 		if(loginStudent != null && loginStudent.getStudentPwd().equals(studentPwd)){
@@ -324,7 +332,7 @@ public class StudentInfoHandler {
 	 * 学生注册
 	 */
 	@ResponseBody
-	@RequestMapping(value="/studentReg", method=RequestMethod.POST)
+	@RequestMapping(value="/common/studentReg", method=RequestMethod.POST)
 	public ResponseBean studentRegister(
 			@RequestParam("account") String studentAccount,
 			@RequestParam("pwd") String studentPwd,
@@ -619,7 +627,7 @@ public class StudentInfoHandler {
 	 * 职工修改密码
 	 */
 	@ResponseBody
-	@RequestMapping("/resetPassword")
+	@RequestMapping("/api/resetPassword")
 	public ResponseBean isResetPwd(
 			@RequestParam("oldPwd") String oldPwd,
 			@RequestParam("newPwd") String newPwd,

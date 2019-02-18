@@ -16,31 +16,43 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class JWTFilter extends BasicHttpAuthenticationFilter {
+public class JWTFilter extends AccessControlFilter {
 
     private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private boolean haveToken(ServletRequest request) {
-        HttpServletRequest req = (HttpServletRequest) request;
-        String authorization = req.getHeader("Authorization");
-        return !TextUtil.isEmpty(authorization);
-	}
     /**
      * 判断用户是否想要登入。
      * 检测header里面是否包含Authorization字段即可
      */
-    @Override
+   // @Override
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
-         return haveToken(request);
+        HttpServletRequest req = (HttpServletRequest) request;
+        String authorization = req.getHeader("Authorization");
+        return authorization != null;
     }
 
-    // 被拒绝后执行的方法
-    //onAccessDenied:表示当访问拒绝时是否已经处理了;如果返回true表示需要继续处理;如果返回false表示该拦截器实例已经处理了,将直接返回即可
+    // 是否拒绝
 	@Override
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-		return false;//super.onAccessDenied(request, response);
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
+    /**
+     *
+     */
+    //@Override
+    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String authorization = httpServletRequest.getHeader("Authorization");
+
+        JWTToken token = new JWTToken(authorization);
+        // 提交给realm进行登入，如果错误他会抛出异常并被isAccessAllowed捕获
+        getSubject(request, response).login(token);
+        // 如果没有抛出异常则代表登入成功，返回true
+        return true;
+    }
+
     /**
      * 这里我们详细说明下为什么最终返回的都是true，即允许访问
      * 例如我们提供一个地址 GET /article
@@ -59,7 +71,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     	}
 
         try {
-        	// 委托给 Realm 进行登录，如果没有引发异常，证明登录成功
+        	// 如果没有引发异常，证明登录成功
             executeLogin(request, response); 
             return true;
         } catch (Exception e) { //捕获提交给realm进行登入的引发的异常
@@ -67,22 +79,6 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
             return false;
         }
     }
-    
-    /**
-     *
-     */
-    @Override
-    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String authorization = httpServletRequest.getHeader("Authorization");
-        JWTToken token = new JWTToken(authorization);
-        // 提交给realm进行登入，如果错误他会抛出异常并被isAccessAllowed捕获
-        getSubject(request, response).login(token);
-        // 如果没有抛出异常则代表登入成功，返回true
-        return true;
-    }
-
-
 
     /**
      * 对跨域提供支持
@@ -106,7 +102,8 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
      * 将非法请求跳转到 /401
      */
     private void responseError(ServletRequest req, ServletResponse response,String message) {
-    	System.out.println("-------->responseError");
+    	System.out.println("------> responseError is called");
+    	/*
     	response.setCharacterEncoding("UTF-8");  
     	response.setContentType("application/json; charset=utf-8");
     	PrintWriter out = null ;
@@ -114,7 +111,6 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     		out = response.getWriter();
             ResponseBean bean = new ResponseBean(401, message, null); 
     	    out.append(bean.toString());
-    	    out.flush();
     	}catch (Exception e){
     	    e.printStackTrace();
     	}finally {
@@ -122,7 +118,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     			out.close();
     		}
 		}   
-	
+		*/
     }
 
 

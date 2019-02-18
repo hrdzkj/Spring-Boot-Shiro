@@ -31,19 +31,6 @@ public class MyRealm extends AuthorizingRealm {
 	private UserComponent userComponent;
 	@Autowired
 	private JWTComponent jwtComponent;
-
-    /*
-    @Autowired
-    public void setUserService(UserComponent userComponent) {
-        this.userComponent = userComponent;
-    }
-
-   
-    @Autowired
-    public void setJWTComponent(JWTComponent jwtComponent) {
-        this.jwtComponent = jwtComponent;
-    }
-    */
     
     @Autowired
     public void setUserService(StudentInfoService studentInfoService) {
@@ -71,28 +58,7 @@ public class MyRealm extends AuthorizingRealm {
     	System.out.println("————权限认证————");
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         simpleAuthorizationInfo.addRole("admin"); //角色
-        //Set<String> permission = new HashSet<>(Arrays.asList(user.getPermission().split(",")));
-        //simpleAuthorizationInfo.addStringPermissions(permission);//权限
         return simpleAuthorizationInfo;
-        /*
-         * 认证
-         if (username != null && jwtUtil.validateToken(authToken)) {
-			Claims claims = jwtUtil.getAllClaimsFromToken(authToken);
-			List<String> rolesMap = claims.get("role", List.class);
-			List<Role> roles = new ArrayList<>();
-			for (String rolemap : rolesMap) {
-				roles.add(Role.valueOf(rolemap));
-			}
-			UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-				username,
-				null,
-				roles.stream().map(authority -> new SimpleGrantedAuthority(authority.name())).collect(Collectors.toList())
-			);
-			return Mono.just(auth);
-		} else {
-			return Mono.empty();
-		}
-         */
     }
 
     /**
@@ -104,6 +70,10 @@ public class MyRealm extends AuthorizingRealm {
     	System.out.println("————开始身份认证————");
     	String token = (String) auth.getCredentials();
  
+        if (token == null) {
+            throw new AuthenticationException("没有token参数");
+        }
+        
         String username = jwtComponent.getUsernameFromToken(token);;
         if (username == null) {
             throw new AuthenticationException("token 不合法");

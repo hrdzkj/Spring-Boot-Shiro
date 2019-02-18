@@ -48,19 +48,19 @@ public class ShiroConfig {
         Map<String, Filter> filterMap = new HashMap<>();
         filterMap.put("jwt", new JWTFilter());
         factoryBean.setFilters(filterMap);
-
         factoryBean.setSecurityManager(securityManager);
-        factoryBean.setUnauthorizedUrl("/401");
-
+        
         /*
                      * 自定义url规则
          * http://shiro.apache.org/web.html#urls-
          */
         Map<String, String> filterRuleMap = new HashMap<>();
-        // 所有请求通过我们自己的JWT Filter
-        filterRuleMap.put("/**", "jwt");
-        // 访问401和404页面不通过我们的Filter // todo 不需要登录的请求，不通过Filter
-        filterRuleMap.put("/401", "anon");
+        // 访问401页面不通过我们的Filter // todo 不需要登录的请求，不通过Filter
+        filterRuleMap.put("/common/**", "anon");//注册
+        //filterRuleMap.put("/studentLogin", "anon");//登录
+        //filterRuleMap.put("/401", "anon");
+        filterRuleMap.put("/api/**", "jwt"); //其他的都需要通过这个过虑器
+        factoryBean.setUnauthorizedUrl("/common/401");//未授权界面;
         factoryBean.setFilterChainDefinitionMap(filterRuleMap);
         return factoryBean;
     }

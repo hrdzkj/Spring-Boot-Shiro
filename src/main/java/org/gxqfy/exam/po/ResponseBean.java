@@ -1,5 +1,10 @@
 package org.gxqfy.exam.po;
 
+import org.springframework.http.codec.json.Jackson2CodecSupport;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 // 既然想要实现restful，那我们要保证每次返回的格式都是相同的，因此建立了一个ResponseBean来统一返回的格式。
 public class ResponseBean {
 
@@ -45,5 +50,18 @@ public class ResponseBean {
 
     public void setData(Object data) {
         this.data = data;
+    }
+    
+    @Override
+    public String toString() {
+    	// TODO Auto-generated method stub
+    	try {
+			return new ObjectMapper().writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "{\"code\"-1,\"msg\":\"json转换异常\",\"data\":null}";
+		}
+    	
     }
 }
