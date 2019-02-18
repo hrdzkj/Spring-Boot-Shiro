@@ -15,7 +15,7 @@ https://www.cnblogs.com/liaojie970/p/8034525.html
 持久层：@Repository
 整个应用层：@MapperScan
 
-
+在Spring中的属性名称首字母一定要小写
 todo:
 1.先连接登录的正常
 DataSource.java--获取数据库信息
@@ -37,7 +37,7 @@ https://www.cnblogs.com/zimengfang/p/5527259.html
 用户接口：登录、注册，修改密码；找回密码,（找回密码，通过发送一个随机生成的密码到注册邮箱，登录之后修改密码）
 考试接口：考试列表，题目列表，选项提交，考试提交；考试成绩； 考试历史浏览
 
-接口--用户下的接口需要登录，不是用户下的接口，不用登录
-
+接口权限控制--用户下的接口需要登录，不是用户下的接口，不用登录
+https://www.jianshu.com/p/24375c61f684
 
 

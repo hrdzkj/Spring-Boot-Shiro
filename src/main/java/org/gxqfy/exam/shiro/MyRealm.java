@@ -27,19 +27,23 @@ public class MyRealm extends AuthorizingRealm {
 
     private static final Logger LOGGER = LogManager.getLogger(MyRealm.class);
 	private StudentInfoService studentInfoService;
-	private UserComponent mUserComponent;
-	private JWTComponent mJwtUtil;
+	@Autowired
+	private UserComponent userComponent;
+	@Autowired
+	private JWTComponent jwtComponent;
 
-    
+    /*
     @Autowired
     public void setUserService(UserComponent userComponent) {
-        this.mUserComponent = userComponent;
+        this.userComponent = userComponent;
     }
 
+   
     @Autowired
     public void setJWTComponent(JWTComponent jwtComponent) {
-        this.mJwtUtil = jwtComponent;
+        this.jwtComponent = jwtComponent;
     }
+    */
     
     @Autowired
     public void setUserService(StudentInfoService studentInfoService) {
@@ -100,19 +104,19 @@ public class MyRealm extends AuthorizingRealm {
     	System.out.println("————开始身份认证————");
     	String token = (String) auth.getCredentials();
  
-        String username = mJwtUtil.getUsernameFromToken(token);;
+        String username = jwtComponent.getUsernameFromToken(token);;
         if (username == null) {
             throw new AuthenticationException("token 不合法");
         }
 
         // 解密获得username，和已经登录的进行对比
-        StudentInfo studentInfo = mUserComponent.getStudent(username);
+        StudentInfo studentInfo = userComponent.getStudent(username);
         if (studentInfo==null) {
         	throw new AuthenticationException("用户尚未登录");
         }
         
        // 是否过期
-    	if(mJwtUtil.isTokenExpired(token)) {
+    	if(jwtComponent.isTokenExpired(token)) {
     		throw new AuthenticationException("token已经过期");
     	}
     	System.out.println("————身份认证成功————");

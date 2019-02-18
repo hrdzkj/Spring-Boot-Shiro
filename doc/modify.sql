@@ -1,0 +1,1 @@
+ALTER TABLE studentinfo add email varchar(320);

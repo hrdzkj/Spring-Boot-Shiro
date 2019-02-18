@@ -59,7 +59,7 @@ public class ShiroConfig {
         Map<String, String> filterRuleMap = new HashMap<>();
         // 所有请求通过我们自己的JWT Filter
         filterRuleMap.put("/**", "jwt");
-        // 访问401和404页面不通过我们的Filter
+        // 访问401和404页面不通过我们的Filter // todo 不需要登录的请求，不通过Filter
         filterRuleMap.put("/401", "anon");
         factoryBean.setFilterChainDefinitionMap(filterRuleMap);
         return factoryBean;
