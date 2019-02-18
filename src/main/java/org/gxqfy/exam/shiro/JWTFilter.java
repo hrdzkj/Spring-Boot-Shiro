@@ -34,8 +34,9 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
          return haveToken(request);
     }
 
-    // 被拒绝后执行的方法
+   
     //onAccessDenied:表示当访问拒绝时是否已经处理了;如果返回true表示需要继续处理;如果返回false表示该拦截器实例已经处理了,将直接返回即可
+    // 这是"————开始身份认证————" 打印两次的原因，原因super.onAccessDenied(request, response)执行了isLoginAttempt
 	@Override
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
 		return false;//super.onAccessDenied(request, response);
@@ -106,7 +107,6 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
      * 将非法请求跳转到 /401
      */
     private void responseError(ServletRequest req, ServletResponse response,String message) {
-    	System.out.println("-------->responseError");
     	response.setCharacterEncoding("UTF-8");  
     	response.setContentType("application/json; charset=utf-8");
     	PrintWriter out = null ;
