@@ -14,6 +14,8 @@ https://www.cnblogs.com/liaojie970/p/8034525.html
 数据层：@Autowired
 持久层：@Repository
 整个应用层：@MapperScan
+其他比较好的第三方组件：mybatis，jackson（bean<-->Json）,shiro
+比较好的思路：全局异常；项目结构(dao,po,service,controller,component,shiro,util),ResponseBean
 
 在Spring中的属性名称首字母一定要小写
 todo:
