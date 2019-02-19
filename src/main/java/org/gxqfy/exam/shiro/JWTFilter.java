@@ -124,7 +124,5 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
 		}   
 	
     }
-
-
-    
+ 
 }

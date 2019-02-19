@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 /**
   *
   * <p>Title: ExamSubjectMiddleInfo</p>
-  * <p>Description: 试卷、试题中间关联表</p>
+  * <p>Description: 试卷、试题中间关联表： 描述一个试卷有那些题目</p>
   * @author: taohan
   * @date: 2018-8-20
   * @time: 下午1:29:29
@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component;
 public class ExamSubjectMiddleInfo {
 
 	private Integer esmId;
-	private ExamPaperInfo examPaper;
-	private SubjectInfo subject;
+	private ExamPaperInfo examPaper;//试卷信息
+	private SubjectInfo subject; //试题信息
 
 	public Integer getEsmId() {
 		return esmId;

@@ -63,7 +63,7 @@ public class ExamPlanInfoHandler {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="/examPlans",method=RequestMethod.POST)
+	@RequestMapping(value="/api/examPlans",method=RequestMethod.POST)
 	public ResponseBean getExamPlans() {
 		List<ExamPlanInfo> examPlans = examPlanInfoService.getExamPlans(null);
 		String message = (examPlans==null||examPlans.isEmpty())?"暂无开始安排":"";
@@ -71,108 +71,26 @@ public class ExamPlanInfoHandler {
 	}
 	
 	
-	/**
-	 * 预添加
-	 * @return
-	 */
-	@RequestMapping("/preAddep")
-	public ModelAndView preAddep() {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("admin/examPlanedit");
-		
-		//获取所有层级信息
-		List<ClassInfo> classes = classInfoService.getClasses(null);
-		model.addObject("classes", classes);
-		//获取所有科目信息
-		List<CourseInfo> courses = courseInfoService.getCourses(null);
-		model.addObject("courses", courses);
-		//获取所有的试卷信息 -- 纯净的
-		List<ExamPaperInfo> examPapers = examPaperInfoService.getExamPapersClear();
-		model.addObject("examPapers", examPapers);
-		
-		return model;
-	}
 
-	/**
-	 * 添加待考信息
-	 * @param examPlan 考试安排记录信息
-	 * @return
-	 */
-	@RequestMapping(value="examPlan", method=RequestMethod.POST)
-	public String isAddExamPlan(ExamPlanInfo examPlan) {
-		logger.info("添加待考记录："+examPlan);
-		examPlanInfoService.isAddExamPlan(examPlan);
-		
-		return "redirect:examPlans";
-	}
-	
-	
-	/**
-	 * 预修改
-	 * @param examPlanId 考试安排(待考)编号
-	 * @return
-	 */
-	@RequestMapping(value="/preUpdateep/{examPlanId}", method=RequestMethod.GET)
-	public ModelAndView preUpdateep(@PathVariable("examPlanId") Integer examPlanId) {
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/admin/examPlanedit");
-		
-		//获取所有层级信息
-		List<ClassInfo> classes = classInfoService.getClasses(null);
-		model.addObject("classes", classes);
-		//获取所有科目信息
-		List<CourseInfo> courses = courseInfoService.getCourses(null);
-		model.addObject("courses", courses);
-		//获取所有的试卷信息 -- 纯净的(简单的)
-		List<ExamPaperInfo> examPapers = examPaperInfoService.getExamPapersClear();
-		model.addObject("examPapers", examPapers);
-		//获取当前修改对象
-		ExamPlanInfo examPlanWithUpdate = examPlanInfoService.getExamPlanById(examPlanId);
-		logger.info("获取要修改的待考记录："+examPlanWithUpdate);
-		model.addObject("examPlan", examPlanWithUpdate);
-		
-		return model;
-	}
-	
-	
-	/**
-	 * 修改待考信息
-	 * @param examPlan 待考记录
-	 * @return
-	 */
-	@RequestMapping(value="preUpdateep/examPlan", method=RequestMethod.PUT)
-	public String isUpdateExamPlan(ExamPlanInfo examPlan) {
-		logger.info("修改待考记录："+examPlan);
-		examPlanInfoService.isUpdateExamPlan(examPlan);
-		
-		return "redirect:../examPlans";
-	}
-	
-	
 	/**
 	 * 查询职工待考信息
 	 * @param classId 职工所在层级编号
 	 * @param gradeId 职工所在科室百年好
-	 * @param studentId 职工编号
+	 * @param studentId 职工编号  实际上这个参数可以不要
 	 * @return
 	 */
-	@RequestMapping("/willexams")
-	public ModelAndView getStudentWillExam(
+	@RequestMapping("/api/willexams")
+	@ResponseBody
+	public ResponseBean getStudentWillExam(
 			@RequestParam("classId") Integer classId,
 			@RequestParam("gradeId") Integer gradeId,
 			@RequestParam(value="studentId", required=false) Integer studentId) {
-		logger.info("查询职工 "+studentId+"(NULL-未指定)待考信息 层级："+classId+", 科室："+gradeId);
-		ModelAndView model = new ModelAndView();
-		model.setViewName("/reception/examCenter");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("classId", classId);
 		map.put("gradeId", gradeId);
-		
 		List<ExamPlanInfo> examPlans = examPlanInfoService.getStudentWillExam(map);
-		model.addObject("examPlans", examPlans);
-		model.addObject("gradeId", gradeId);
-		
-		return model;
+				String msg = (examPlans==null||examPlans.isEmpty())?"占无待考记录":"";
+		return new ResponseBean(ResultCode.CODE_OK, msg, examPlans);
 	}
 	
 	
@@ -233,19 +151,4 @@ public class ExamPlanInfoHandler {
 		return flag;
 	}
 	
-	
-	/**
-	 * 带教移除考试安排记录
-	 * @param examPlanId
-	 * @return
-	 */
-	@RequestMapping(value="/del/{examPlanId}")
-	public String isDelExamPlan(
-			@PathVariable("examPlanId") Integer examPlanId) {
-		logger.info("带教 移除考试安排 "+examPlanId);
-		
-		int row = examPlanInfoService.isRemoveExamPlan(examPlanId);
-		
-		return "redirect:../examPlans";
-	}
 }

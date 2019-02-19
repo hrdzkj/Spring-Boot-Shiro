@@ -40,7 +40,7 @@ https://www.cnblogs.com/zimengfang/p/5527259.html
 里程碑：
 1.用户管理
 2.考试列表
-3.考试
+3.考试 调用这个方法的地方getExamPaperWithSubject，就是和考试有关的地方。 "/begin" 进入考试
 4.考试历史
 
 
