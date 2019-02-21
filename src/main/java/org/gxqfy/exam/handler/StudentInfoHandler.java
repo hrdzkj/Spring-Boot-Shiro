@@ -216,8 +216,9 @@ public class StudentInfoHandler {
 	@ResponseBody
 	public ResponseBean beginExam(@RequestParam("classId") Integer classId,
 			@RequestParam("examPaperId") Integer examPaperId,
-			@RequestParam(value = "studentId", required = false) Integer studentId,
-			@RequestParam("examTime") Integer examTime, @RequestParam("beginTime") String beginTime,
+			@RequestParam(value = "studentId") Integer studentId,
+			@RequestParam(value="examTime",required=false) Integer examTime, 
+			@RequestParam(value="beginTime", required = false) String beginTime,
 			@RequestParam("gradeId") Integer gradeId, HttpSession session){
 
 		
